@@ -51,16 +51,14 @@ evalEstado  (j, k)  | (k == 0) = if j == C then CPerdio else CGano
 -- 	En el caso mejorJug (H, k) tenemos que devolver la jugada que nos da el valor minimo (es decir, consideramos 
 -- 	la mejor jugada para H, que seria la peor para C).
 mejorJug :: Estado -> Int
-mejorJug (C, piedras) 
- | (piedras == 1) || (piedras == 3) || (piedras == 4) = piedras --Si hay 1,3 o 4 piedras la mejor jugada para la computadora es 
- --sacar esa cantidad de pidras.
- | otherwise = maximum (1:[j | j <- jugadas,j <= piedras, evalEstado (H, piedras - j) == CGano]) --Si no hay esas piedras hicimos 
+mejorJug (C, piedras) = maximum (1:[j | j <- jugadas,j <= piedras, (evalEstado (H, piedras - j) == CGano) || (j == piedras)])
+ --Si hay 1,3 o 4 piedras la mejor jugada para la computadora es sacar esa cantidad de pidras.
+ --Si no hay esas piedras hicimos 
  --una lista con las mejores jugadas para la computadora y que saque las piedras maximas de esa lista, 
  --le concatenamos el 1 ya que aveces no hay jugadas ganadoras en ese caso  por defecto hacemos que saque 1 piedra.
-mejorJug (H, piedras) 
- | (piedras == 1) || (piedras == 3) || (piedras == 4) = piedras --Si hay 1,3 o 4 piedras la mejor jugada para el humano es 
- --sacar esa cantidad de pidras.
- | otherwise = maximum (1:[j | j <- jugadas,j <= piedras, evalEstado (C, piedras - j) == CPerdio]) --Si no hay esas piedras hicimos 
+mejorJug (H, piedras) = maximum (1:[j | j <- jugadas,j <= piedras, (evalEstado (C, piedras - j) == CPerdio) || (j == piedras)]) 
+ --Si hay 1,3 o 4 piedras la mejor jugada para el humano es sacar esa cantidad de pidras.
+ --Si no hay esas piedras hicimos 
  --una lista con las peores jugadas para la computadora y que saque las piedras maximas de esa lista, 
  --le concatenamos el 1 ya que a veces no hay jugadas donde la computadora pierde en ese caso  por defecto hacemos que saque 1 piedra.
 
